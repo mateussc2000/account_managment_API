@@ -46,7 +46,7 @@ public class ClientServiceImpl implements ClientService {
     }
 
     @Override
-    public void deleteClient(long id, Client clientRequest) {
+    public void deleteClient(long id) {
         Client client = repository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Cliente não existe!"));
         
