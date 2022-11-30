@@ -37,4 +37,10 @@ public class BankAccount {
     @JoinColumn(name = "client_id", referencedColumnName = "client_id")
     @JsonBackReference
     private Client client;
+
+    public BankAccount(Client client, String accountType, double balance){
+        setClient(client);
+        setAccountType(accountType);
+        setBalance(balance);
+    }
 }

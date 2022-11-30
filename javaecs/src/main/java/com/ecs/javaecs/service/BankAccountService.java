@@ -1,18 +1,21 @@
 package com.ecs.javaecs.service;
 
-//import java.util.List;
+import java.util.List;
 
+import com.ecs.javaecs.model.Client;
 import com.ecs.javaecs.model.BankAccount;
 
 public interface BankAccountService {
     
-    //List <BankAccount> findAccountsByClient(Client client);
+    List <BankAccount> findAccountsByClient(Client client);
 
-    BankAccount createBankAccount(long id, BankAccount bankAccount);
+    BankAccount findAccountById(long accountId);
 
-    BankAccount withdraw(long id, String accountType, double valor);
+    BankAccount createBankAccount(long clientId, BankAccount bankAccount);
 
-    BankAccount deposit(long id, String accountType, double valor);
+    BankAccount withdraw(long accountId, double valor);
+
+    BankAccount deposit(long accountId, double valor);
 
     void deleteAccount(BankAccount bankAccount);
 }
