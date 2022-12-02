@@ -20,7 +20,7 @@ import com.ecs.javaecs.service.ClientService;
 @Service("bankAccountService")
 public class BankAccountServiceImpl implements BankAccountService{
     
-    
+    @Autowired
     private BankAccountRepository repository;
 
     @Autowired
