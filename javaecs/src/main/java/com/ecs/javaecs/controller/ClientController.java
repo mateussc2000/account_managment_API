@@ -51,7 +51,7 @@ public ResponseEntity<ClientDto> findClientById(@PathVariable(name = "id") Long 
 
 
 //Post Methods
-@PostMapping
+@PostMapping("cadastrar")
 public ResponseEntity<ClientDto> createClient(@RequestBody ClientDto clientDto) {
 
     // convert DTO to entity
