@@ -35,7 +35,7 @@ public class BankAccountController {
     private ModelMapper modelMapper;
 
 //Get Methods
-@GetMapping
+@GetMapping("/cliente")
 public List<BankAccountDto> findAccountsByClient(@RequestBody ClientDto clientDto) {
     Client client = modelMapper.map(clientDto, Client.class);
 
@@ -43,8 +43,8 @@ public List<BankAccountDto> findAccountsByClient(@RequestBody ClientDto clientDt
     .collect(Collectors.toList());
 }
 
-@GetMapping
-public BankAccount findAccountById(long id) {
+@GetMapping("/{id}")
+public BankAccount findAccountById(@PathVariable(name = "id") long id) {
     return bankAccountService.findAccountById(id);
 }
 
@@ -63,8 +63,8 @@ public ResponseEntity<BankAccountDto> createBankAccount(long id, @RequestBody Ba
 }
 
 //Put Methods
-@PutMapping("${id}")
-public ResponseEntity<BankAccountDto> withdraw(@PathVariable(name = "id") long id, double valor) {
+@PutMapping("saque/{id}")
+public ResponseEntity<BankAccountDto> withdraw(@PathVariable long id, double valor) {
     BankAccount bankAccount = bankAccountService.withdraw(id, valor);
     
     BankAccountDto bankAccountResponse = modelMapper.map(bankAccount, BankAccountDto.class);
@@ -72,8 +72,8 @@ public ResponseEntity<BankAccountDto> withdraw(@PathVariable(name = "id") long i
     return new ResponseEntity<BankAccountDto>(bankAccountResponse, HttpStatus.OK);
 }
 
-@PutMapping("${id}")
-public ResponseEntity<BankAccountDto> deposit(@PathVariable(name = "id") long id, double valor) {
+@PutMapping("deposito/{id}")
+public ResponseEntity<BankAccountDto> deposit(@PathVariable long id, double valor) {
     BankAccount bankAccount = bankAccountService.deposit(id, valor);
     
     BankAccountDto bankAccountResponse = modelMapper.map(bankAccount, BankAccountDto.class);

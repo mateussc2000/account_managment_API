@@ -26,7 +26,12 @@ public class ClientServiceImpl implements ClientService {
 
     @Override
     public List<Client> getAllClients() {
-        return repository.findAll();
+        List<Client> clients = repository.findAll();
+        if (clients.isEmpty()) {
+            throw new ResourceNotFoundException("Não há clientes disponíveis");
+        } else {
+            return clients;
+        } 
     }
 
     @Override

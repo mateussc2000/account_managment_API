@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.ecs.javaecs.model.BankAccount;
 import com.ecs.javaecs.model.Client;
@@ -19,7 +20,7 @@ import com.ecs.javaecs.service.ClientService;
 @Service("bankAccountService")
 public class BankAccountServiceImpl implements BankAccountService{
     
-    @Autowired
+    
     private BankAccountRepository repository;
 
     @Autowired
@@ -62,7 +63,8 @@ public class BankAccountServiceImpl implements BankAccountService{
             throw new InternalError("Não foi possível acessar o banco de dados");
         }
     }
-
+    
+    @Transactional
     @Override
     public BankAccount withdraw(long id, double valor) {
         BankAccount bankAccount = findAccountById(id);
@@ -80,6 +82,7 @@ public class BankAccountServiceImpl implements BankAccountService{
         }
     }
 
+    @Transactional
     @Override
     public BankAccount deposit(long id, double valor) {
         BankAccount bankAccount = findAccountById(id);
