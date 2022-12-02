@@ -9,9 +9,7 @@ import org.springframework.context.annotation.Bean;
 public class JavaecsApplication {
 
 	@Bean
-	public ModelMapper modelMapper() {
-		return new ModelMapper();
-	}
+	public ModelMapper modelMapper() { return new ModelMapper(); }
 	
 	public static void main(String[] args) {
 		SpringApplication.run(JavaecsApplication.class, args);
