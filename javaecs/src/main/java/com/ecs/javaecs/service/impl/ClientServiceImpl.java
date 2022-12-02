@@ -36,6 +36,9 @@ public class ClientServiceImpl implements ClientService {
 
     @Override
     public Client createClient(Client client) {
+        if (repository.existsByCpf(client.getCpf())) {
+            throw new InternalError("Cliente com este CPF já existe");
+        }
         return repository.save(client);
     }
 
