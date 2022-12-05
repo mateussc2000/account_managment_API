@@ -11,11 +11,11 @@ public interface BankAccountService {
 
     BankAccount findAccountById(long accountId);
 
-    BankAccount createBankAccount(long clientId, BankAccount bankAccount);
+    BankAccount createBankAccount(Client client, BankAccount bankAccount);
 
-    BankAccount withdraw(long accountId, double valor);
+    BankAccount withdraw(long accountId, double amount);
 
-    BankAccount deposit(long accountId, double valor);
+    BankAccount deposit(long accountId, double amount);
 
     void deleteAccount(BankAccount bankAccount);
 }

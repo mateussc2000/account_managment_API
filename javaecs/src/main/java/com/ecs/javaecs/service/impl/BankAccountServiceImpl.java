@@ -15,7 +15,6 @@ import com.ecs.javaecs.model.BankAccount;
 import com.ecs.javaecs.model.Client;
 import com.ecs.javaecs.repository.BankAccountRepository;
 import com.ecs.javaecs.service.BankAccountService;
-import com.ecs.javaecs.service.ClientService;
 
 @Service("bankAccountService")
 public class BankAccountServiceImpl implements BankAccountService{
@@ -23,17 +22,24 @@ public class BankAccountServiceImpl implements BankAccountService{
     @Autowired
     private BankAccountRepository repository;
 
-    @Autowired
-    private ClientService clientService;
-
+   
     @Override
     public List<BankAccount> findAccountsByClient(Client clientRequest) {
-        Client client = clientService.findClientById(clientRequest.getClientId());
-
+      
         try {
-            return repository.findAllByClient(client);
+           
+            List<BankAccount> accounts = repository.findAllByClient(clientRequest); 
+            
+            if (accounts.isEmpty()) 
+            throw new InternalError("Cliente não possui contas cadastradas");
+            
+            return accounts;
+
+        } catch (NullPointerException e) {
+            throw new NullPointerException("Insira o ID do cliente");
+      
         } catch (DataAccessException e) {
-            throw new ResourceNotFoundException("Não foi possível encontrar contas para este cliente.");
+            throw new ResourceNotFoundException("Não foi acessar o banco de dados.");
         }
     }
 
@@ -49,10 +55,9 @@ public class BankAccountServiceImpl implements BankAccountService{
     }
 
     @Override
-    public BankAccount createBankAccount(long id, BankAccount bankAccountRequest) {
-        Client client = clientService.findClientById(id);
-
-        BankAccount bankAccount = new BankAccount(client, bankAccountRequest.getAccountType(), bankAccountRequest.getBalance());
+    public BankAccount createBankAccount(Client client ,BankAccount bankAccountRequest) {
+      
+        BankAccount bankAccount = new BankAccount(client, bankAccountRequest.getAccountType(), 0);
        
         Set<BankAccount> accounts = new HashSet<>();
         accounts.add(bankAccount);
@@ -66,14 +71,14 @@ public class BankAccountServiceImpl implements BankAccountService{
     
     @Transactional
     @Override
-    public BankAccount withdraw(long id, double valor) {
+    public BankAccount withdraw(long id, double amount) {
         BankAccount bankAccount = findAccountById(id);
 
-        if (bankAccount.getBalance() - valor < 0) {
+        if (bankAccount.getBalance() - amount < 0) {
             throw new InternalError("Cliente não possui saldo suficiente");
         }  
         
-        bankAccount.setBalance(valor);
+        bankAccount.setBalance(bankAccount.getBalance() - amount);
         
         try {
             return repository.save(bankAccount);
@@ -84,10 +89,10 @@ public class BankAccountServiceImpl implements BankAccountService{
 
     @Transactional
     @Override
-    public BankAccount deposit(long id, double valor) {
+    public BankAccount deposit(long id, double amount) {
         BankAccount bankAccount = findAccountById(id);
 
-        bankAccount.setBalance(valor);
+        bankAccount.setBalance(bankAccount.getBalance() + amount);
 
         try {
             return repository.save(bankAccount);
